@@ -1,10 +1,18 @@
-import ptdmf.basic_evaluators #calling what is in the init file
+import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
+from itertools import cycle
+
+import mofr.metrics as metrics
+from mofr.evaluator import Evaluator
+from mofr.basic_evaluators.settings import figsize_, colors_
+
 
 class LiftCurveEvaluator(Evaluator):
 
-    def __init__(self, df=None, targets=None, scores=None):
+    def __init__(self, data=None, targets=None, scores=None):
         """
-        df: The pandas dataframe containing all the necessary columns.
+        data: The pandas dataframe containing all the necessary columns.
 
         targets: These should be the list of binary targets along with their 
         observability flags as follows. [('target1','target1_obs'),('target2', 'target2_obs)]
@@ -12,13 +20,13 @@ class LiftCurveEvaluator(Evaluator):
 
         scores: List of score columns as follows ['score1', 'score2', 'score3']
         """
-        self.df=df
+        self.data=data
         self.targets=targets
         self.scores=scores
 
-    def d(self, df=None):
-          self.df=df
-          return df       
+    def d(self, data=None):
+          self.data=data
+          return self       
 
     def t(self, targets=None):
           self.targets=targets
@@ -31,7 +39,7 @@ class LiftCurveEvaluator(Evaluator):
     def get_graph(self):
 
         # setup plot details
-        colors = colors_
+        colors = cycle(colors_)
 
         plt.figure(figsize=figsize_)
         lines = []
@@ -39,26 +47,34 @@ class LiftCurveEvaluator(Evaluator):
 
         n_scores=len(self.scores)
         x_= [(x/10) for x in range (1,11)] #x-axis with different lifts
+        max_lift=1.1
 
         #plot each lift curve for each score
-        for i, color in zip(range(n_scores), colors[n_scores]):
+        for i, color in zip(range(n_scores), colors):
             target_=self.targets[0]
             score_=self.scores[i]
-            df_=self.df[self.df[target_[1]==1]] #filtering for only target-observable cases
+            df_=self.data[self.data[target_[1]]==1] #filtering for only target-observable cases
 
-            lift_curve = [metrics.liftN(df_[target[0]], df_[score_], x) for x in x_]
+            lift_curve = [metrics.liftN(df_[target_[0]], df_[score_], x) for x in x_]
+            max_lift=max(max(lift_curve), max_lift)
             l, = plt.plot(x_, lift_curve, color=color, lw=2)
             lines.append(l)
             labels.append(f'{score_}')
 
+        #plotting the base line
+        _x=[x/11 for x in range(12)]
+        _y=[1 for x in range(12)]
+        plt.plot(_x, _y, linestyle='--', color='blue')
+                
+        #set plotting parameters
         fig = plt.gcf()
         fig.subplots_adjust(bottom=0.25)
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
+        plt.xlim([0.0, 1.02])
+        plt.ylim([0.9, max_lift+0.2])
         plt.xlabel('Lift percentage')
         plt.ylabel('Lift')
-        plt.title(f'Lift for target {self.targets[0][0]}')
-        plt.legend(lines, labels, loc=(0, -.38), prop=dict(size=14))
+        plt.title(f'Lifts for target "{self.targets[0][0]}"')
+        plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
 
         plt.show()
         
