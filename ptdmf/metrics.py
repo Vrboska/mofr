@@ -12,10 +12,19 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
+from sklearn.metrics import auc
+
 
 from sklearn.metrics import roc_auc_score
 from scipy.stats import ks_2samp
 
+from sklearn.metrics import roc_curve
+from sklearn.metrics import precision_recall_curve
+
+
+
+
+# scalar binary classification metrics
 
 def gini(y_true, y_score, *args, **kwargs):
     """GINI coefficient in this case is simply scaled
@@ -47,4 +56,8 @@ def ks_score(data1, data2, alternative='two-sided', mode='auto'):
     """Kolmogorov smirnov statistic."""
 
     return ks_2samp(data1, data2, alternative='two-sided', mode='auto').statistic
+
+
+
+
 
