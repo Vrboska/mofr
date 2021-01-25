@@ -51,10 +51,12 @@ def lift(y_true, y_score):
     return liftN(y_true, y_score, 0.1)
 
 
-def ks_score(data1, data2, alternative='two-sided', mode='auto'):
+def ks_score(y_true, y_score, alternative='two-sided', mode='auto'):
     """Kolmogorov smirnov statistic."""
 
-    return ks_2samp(data1, data2, alternative='two-sided', mode='auto').statistic
+    df=pd.DataFrame(zip(y_true, y_score))
+    
+    return ks_2samp(df[df[0]==1][1], df[df[0]==0][1], alternative='two-sided', mode='auto').statistic
 
 
 
