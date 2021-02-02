@@ -40,7 +40,7 @@ def liftN(y_true, y_score, p):
 
     q=1-p
     quantile=np.quantile(y_score, q)
-    bad_rate_quant=sum(y_true[y_score>q])/len(y_true[y_score>q])
+    bad_rate_quant=sum(y_true[y_score>quantile])/len(y_true[y_score>quantile])
     bad_rate_overall=sum(y_true)/len(y_true)
 
     return bad_rate_quant/bad_rate_overall
