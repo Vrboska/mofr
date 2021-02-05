@@ -7,6 +7,7 @@ to observations with more density of 1 labels and the lower scores
 correspond to observations with relatively more 0's than 1's."""
 
 import numpy as np
+import pandas as pd
 
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
