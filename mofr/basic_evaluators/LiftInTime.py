@@ -58,7 +58,7 @@ class LiftInTimeEvaluator(Evaluator):
       n_scores=len(self.scores)
       
 
-      #plot each GINI curve for each score
+      #plot each LIFT curve for each score
       for i, color in zip(range(n_scores), colors):
             target_=self.targets[0]
             score_=self.scores[i]
@@ -81,7 +81,7 @@ class LiftInTimeEvaluator(Evaluator):
       #plt.ylim(-0.01,1.03)
       plt.xlabel('Month')
       plt.ylabel('LIFT')
-      plt.title(f'LIFT in time for target "{self.targets[0][0]}"')
+      plt.title(f'LIFT (10%) in time for target "{self.targets[0][0]}"')
       plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
 
       plt.show()    
