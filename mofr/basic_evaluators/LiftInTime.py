@@ -43,16 +43,50 @@ class LiftInTimeEvaluator(Evaluator):
 
     def get_graph(self):
 
-        # setup plot details
-        colors = cycle(colors_)
+      # setup plot details
+      colors = cycle(colors_)
 
-        plt.figure(figsize=figsize_)
+      plt.figure(figsize=figsize_)
 
-        """
-        The idea is to have a graph of Lift metric (metrics.lift) in time (x-axis chronologically ordered) for a given
-        target and given scores, using the legend,labels and colors as in e.g. ROCCurve.py.
-        """
-        return self
+      """
+      The idea is to have a graph of Lift metric (metrics.lift) in time (x-axis chronologically ordered) for a given
+      target and given scores, using the legend,labels and colors as in e.g. ROCCurve.py.
+      """
+      lines = []
+      labels = []
+
+      n_scores=len(self.scores)
+      
+
+      #plot each GINI curve for each score
+      for i, color in zip(range(n_scores), colors):
+            target_=self.targets[0]
+            score_=self.scores[i]
+            df_=self.data[self.data[target_[1]]==1] #filtering for only target-observable cases
+
+            lift_by_month=df_.groupby('month').apply(lambda x: metrics.lift(x[target_[0]], x[score_]) ).to_frame('LIFT')
+            lift_by_month.reset_index(level=0,inplace=True)
+            _x=lift_by_month['month'].apply(int)
+            _y=lift_by_month['LIFT']
+            l, = plt.plot(_x, _y, color=color, lw=2)
+            lines.append(l)
+            labels.append(f'{score_}')
+
+      #set plotting parameters
+      fig = plt.gcf()
+      fig.subplots_adjust(bottom=0.25)
+      plt.ticklabel_format(useOffset=False)
+      plt.xticks(range(min(_x), max(_x)+1))
+      #plt.xlim(min(_x)-0.1,max(_x)+0.1)
+      #plt.ylim(-0.01,1.03)
+      plt.xlabel('Month')
+      plt.ylabel('LIFT')
+      plt.title(f'LIFT in time for target "{self.targets[0][0]}"')
+      plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
+
+      plt.show()    
+
+      return self
 
     def get_table(self):
         pass
