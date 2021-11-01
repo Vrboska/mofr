@@ -60,17 +60,17 @@ class GiniInTimeEvaluator(Evaluator):
 
       #plot each GINI curve for each score
       for i, color in zip(range(n_scores), colors):
-            target_=self.targets[0]
-            score_=self.scores[i]
-            df_=self.data[self.data[target_[1]]==1] #filtering for only target-observable cases
+          target_=self.targets[0]
+          score_=self.scores[i]
+          df_=self.data[self.data[target_[1]]==1] #filtering for only target-observable cases
 
-            gini_by_month=df_.groupby('month').apply(lambda x: metrics.gini(x[target_[0]], x[score_]) ).to_frame('GINI')
-            gini_by_month.reset_index(level=0,inplace=True)
-            _x=gini_by_month['month'].apply(int)
-            _y=gini_by_month['GINI']
-            l, = plt.plot(_x, _y, color=color, lw=2)
-            lines.append(l)
-            labels.append(f'{score_}')
+          gini_by_month=df_.groupby('month').apply(lambda x: metrics.gini(x[target_[0]], x[score_]) ).to_frame('GINI')
+          gini_by_month.reset_index(level=0,inplace=True)
+          _x=gini_by_month['month'].apply(int)
+          _y=gini_by_month['GINI']
+          l, = plt.plot(_x, _y, color=color, lw=2)
+          lines.append(l)
+          labels.append(f'{score_}')
 
       #set plotting parameters
       fig = plt.gcf()
@@ -87,24 +87,53 @@ class GiniInTimeEvaluator(Evaluator):
       plt.show()       
 
       return self
+    
 
     def get_table(self):
-        pass
-
-        
-        """
-        The idea is to have a table corresponding to the data shown in graph in a following format (or similar):
-                                
-                        GINI on 'name of the target column'
-        Time             Model1         Model2      Model3       
-        ------------------------------------------------------------
-        202001          0.23            0.25           ...
-        202002          0.33            ...            ...
-        202003          0.54            ...            ...
-        ------------------------------------------------------------
-        All             0.42            ...            ...
+      """
+      The idea is to have a table corresponding to the data shown in graph in a following format (or similar):
+                              
+                      GINI on 'name of the target column'
+      Time             Model1         Model2      Model3       
+      ------------------------------------------------------------
+      202001          0.23            0.25           ...
+      202002          0.33            ...            ...
+      202003          0.54            ...            ...
+      ------------------------------------------------------------
+      All             0.42            ...            ...
 
 
-        Let's implement this using pandas.pivot_table since it will make it easier later to combine different tables
-        into one.
-        """
+      Let's implement this using pandas.pivot_table since it will make it easier later to combine different tables
+      into one.
+      """
+    
+      def gini_zipped(x):
+          """Auxilliary function for calculating GINI in pivot table."""
+          list_=list(zip(*x))
+          target_=list_[0]
+          score_=list_[1]
+          return metrics.gini(target_, score_)
+            
+      n_scores=len(self.scores)
+
+      tables=[]
+
+      #creating pivot table for each score
+      for i in range(n_scores):          
+          target_=self.targets[0]
+          score_=self.scores[i]
+          df_=self.data[self.data[target_[1]]==1] #filtering for only target-observable cases
+
+          df_['target_score_']=list(zip(df_[target_[0]], df_[score_]))
+
+          pt=pd.pivot_table(df_, values=['target_score_'], index='month', columns=None, aggfunc=gini_zipped, fill_value=None, margins=True, dropna=True, margins_name='All')
+          pt.columns=[score_]
+          tables.append(pt)
+
+      #gathering the final table together
+      from functools import reduce
+      final_table=reduce(lambda x, y: x.merge(y,left_index=True,right_index=True), tables)
+      final_table=final_table.style.set_table_attributes("style='display:inline'").set_caption(f'GINI on target "{target_[0]}"')  
+      self.table=final_table
+      
+      return self
