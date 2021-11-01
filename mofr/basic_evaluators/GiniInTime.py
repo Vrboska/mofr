@@ -64,9 +64,9 @@ class GiniInTimeEvaluator(Evaluator):
           score_=self.scores[i]
           df_=self.data[self.data[target_[1]]==1] #filtering for only target-observable cases
 
-          gini_by_month=df_.groupby('month').apply(lambda x: metrics.gini(x[target_[0]], x[score_]) ).to_frame('GINI')
+          gini_by_month=df_.groupby(self.time_column).apply(lambda x: metrics.gini(x[target_[0]], x[score_]) ).to_frame('GINI')
           gini_by_month.reset_index(level=0,inplace=True)
-          _x=gini_by_month['month'].apply(int)
+          _x=gini_by_month[self.time_column].apply(int)
           _y=gini_by_month['GINI']
           l, = plt.plot(_x, _y, color=color, lw=2)
           lines.append(l)
@@ -126,7 +126,7 @@ class GiniInTimeEvaluator(Evaluator):
 
           df_['target_score_']=list(zip(df_[target_[0]], df_[score_]))
 
-          pt=pd.pivot_table(df_, values=['target_score_'], index='month', columns=None, aggfunc=gini_zipped, fill_value=None, margins=True, dropna=True, margins_name='All')
+          pt=pd.pivot_table(df_, values=['target_score_'], index=self.time_column, columns=None, aggfunc=gini_zipped, fill_value=None, margins=True, dropna=True, margins_name='All')
           pt.columns=[score_]
           tables.append(pt)
 

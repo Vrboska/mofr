@@ -64,9 +64,9 @@ class LiftInTimeEvaluator(Evaluator):
                   score_=self.scores[i]
                   df_=self.data[self.data[target_[1]]==1] #filtering for only target-observable cases
 
-                  lift_by_month=df_.groupby('month').apply(lambda x: metrics.lift(x[target_[0]], x[score_]) ).to_frame('LIFT')
+                  lift_by_month=df_.groupby(self.time_column).apply(lambda x: metrics.lift(x[target_[0]], x[score_]) ).to_frame('LIFT')
                   lift_by_month.reset_index(level=0,inplace=True)
-                  _x=lift_by_month['month'].apply(int)
+                  _x=lift_by_month[self.time_column].apply(int)
                   _y=lift_by_month['LIFT']
                   l, = plt.plot(_x, _y, color=color, lw=2)
                   lines.append(l)
@@ -128,7 +128,7 @@ class LiftInTimeEvaluator(Evaluator):
 
                   df_['target_score_']=list(zip(df_[target_[0]], df_[score_]))
 
-                  pt=pd.pivot_table(df_, values=['target_score_'], index='month', columns=None, aggfunc=lift_zipped, fill_value=None, margins=True, dropna=True, margins_name='All')
+                  pt=pd.pivot_table(df_, values=['target_score_'], index=self.time_column, columns=None, aggfunc=lift_zipped, fill_value=None, margins=True, dropna=True, margins_name='All')
                   pt.columns=[score_]
                   tables.append(pt)
 
