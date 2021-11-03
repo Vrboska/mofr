@@ -19,6 +19,9 @@ class KSInTimeEvaluator(Evaluator):
         Only the first target will be displayed in the graph at the moment.
 
         scores: List of score columns as follows ['score1', 'score2', 'score3']
+
+        time_column: The name of the column containing the time information. This should be an integer e.g. 
+        2019 for year, 202110 for month, 20211001 for day etc.        
         """
         self.data=data
         self.targets=targets
@@ -79,7 +82,7 @@ class KSInTimeEvaluator(Evaluator):
       plt.xticks(range(min(_x), max(_x)+1))
       #plt.xlim(min(_x)-0.1,max(_x)+0.1)
       #plt.ylim(-0.01,1.03)
-      plt.xlabel('Month')
+      plt.xlabel(self.time_column)
       plt.ylabel('KS')
       plt.title(f'KS in time for target "{self.targets[0][0]}"')
       plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
