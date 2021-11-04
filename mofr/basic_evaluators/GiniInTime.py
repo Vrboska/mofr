@@ -86,6 +86,7 @@ class GiniInTimeEvaluator(Evaluator):
       plt.ylabel('GINI')
       plt.title(f'GINI in time for target "{self.targets[0][0]}"')
       plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
+      plt.grid(True)
 
       plt.show()       
 

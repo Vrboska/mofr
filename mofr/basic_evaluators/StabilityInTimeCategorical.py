@@ -67,7 +67,7 @@ class StabilityInTimeCategoricalEvaluator(Evaluator):
       #  produce table of distribution/share of each category in time
       crosstab_=pd.crosstab(index=df_[self.predictor_column], columns=df_[self.time_column], values=df_['one'], rownames=None, colnames=None, aggfunc=sum, margins=False, margins_name='All', dropna=True, normalize='columns').transpose()
 
-      #plot each GINI curve for each score
+      #plot each curve for each category
       for i, color in zip(range(n_categories), colors):
           data_for_plot=crosstab_[categories[i]]
           l, = plt.plot(data_for_plot, color=color, lw=2)
@@ -85,6 +85,7 @@ class StabilityInTimeCategoricalEvaluator(Evaluator):
       plt.ylabel('Share of the given category')
       plt.title(f'Distribution of predictor "{self.predictor_column}" in time')
       plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
+      plt.grid(True)
 
       plt.show()       
 

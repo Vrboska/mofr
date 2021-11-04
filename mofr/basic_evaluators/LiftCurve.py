@@ -75,6 +75,7 @@ class LiftCurveEvaluator(Evaluator):
         plt.ylabel('Lift')
         plt.title(f'Lifts for target "{self.targets[0][0]}"')
         plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
+        plt.grid(True)
 
         plt.show()
         

@@ -92,6 +92,7 @@ class StabilityInTimeContinuousEvaluator(Evaluator):
       plt.ylabel('Percentiles')
       plt.title(f'Distribution of predictor "{self.predictor_column}" in time')
       plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
+      plt.grid(True)
 
       plt.show()       
 
