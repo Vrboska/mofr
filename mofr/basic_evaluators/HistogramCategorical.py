@@ -5,7 +5,7 @@ from itertools import cycle
 
 import mofr.metrics as metrics
 from mofr.evaluator import Evaluator
-from mofr.basic_evaluators.settings import figsize_, colors_
+from mofr.basic_evaluators.settings import figsize_, colors_, max_categories_
 
 
 class HistogramCategoricalEvaluator(Evaluator):
@@ -45,7 +45,7 @@ class HistogramCategoricalEvaluator(Evaluator):
 
       #assert the correct number of categories
       assert n_categories>=2,  'The predictor column specified has less than 2 unique categories!'
-      assert n_categories<=20, 'The predictor column specified has more than 20 unique categories!'
+      assert n_categories<=max_categories_, f'The predictor column specified has more than {max_categories_} unique categories!'
 
       #  produce table of distribution/share of each category in time
       table=df_['categorical_predictor'].value_counts(dropna=False, normalize=True)
@@ -75,7 +75,7 @@ class HistogramCategoricalEvaluator(Evaluator):
 
       #assert the correct number of categories
       assert n_categories>=2,  'The predictor column specified has less than 2 unique categories!'
-      assert n_categories<=20, 'The predictor column specified has more than 20 unique categories!'
+      assert n_categories<=max_categories_, f'The predictor column specified has more than {max_categories_} unique categories!'
 
       #  produce table of distribution/share of each category in time
       table1=df_['categorical_predictor'].value_counts(dropna=False, normalize=True)
