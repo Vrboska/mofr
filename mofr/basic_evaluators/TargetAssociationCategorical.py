@@ -55,7 +55,7 @@ class TargetAssociationCategoricalEvaluator(Evaluator):
       plt.figure(figsize=figsize_)
 
       """
-      The idea is to have a graph of Share of each category in time (x-axis chronologically ordered) for the 
+      The idea is to have a graph of Mean of target (default rate) of each category in time (x-axis chronologically ordered) for the 
       given predictor
       """
       lines = []
@@ -102,18 +102,7 @@ class TargetAssociationCategoricalEvaluator(Evaluator):
     
 
     def get_table(self):
-      """
-      The idea is to have a table corresponding to the data shown in graph in a following format (or similar):
-                              
-                      Distribution of 'categorical predictor' in time
-      Time             A         B      C       
-      ------------------------------------------------------------
-      202001          0.23            0.25           ...
-      202002          0.33            ...            ...
-      202003          0.54            ...            ...
-      ------------------------------------------------------------
-      All             0.42            ...            ...
-      """
+
       #set up data details
       target_=self.targets[0]
       df_=self.data[self.data[target_[1]]==1]#filtering for only target-observable cases
