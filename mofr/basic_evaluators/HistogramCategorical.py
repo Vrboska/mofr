@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, rcParams, rcParamsDefault
 from itertools import cycle
 
 import mofr.metrics as metrics
@@ -34,6 +34,7 @@ class HistogramCategoricalEvaluator(Evaluator):
     def get_graph(self, plot=True):
 
       # setup plot details
+      rcParams.update(rcParamsDefault)
       f, ax = plt.subplots(figsize=figsize_)
       
       #set up data details
@@ -89,6 +90,7 @@ class HistogramCategoricalEvaluator(Evaluator):
 
       final_table=pd.concat([table1, table2], axis=1)
       final_table.columns=[final_table.columns[0]+' %', final_table.columns[1]]
+      final_table=final_table.style.set_table_attributes("style='display:inline'").set_caption(f'Distribution of predictor "{self.predictor_column}"')  
       self.table=final_table
       
       return self

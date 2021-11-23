@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, rcParams, rcParamsDefault
 from itertools import cycle
 
 import mofr.metrics as metrics
@@ -48,6 +48,7 @@ class TargetAssociationContinuousEvaluator(Evaluator):
     def get_graph(self, plot=True):
 
       # setup plot details
+      rcParams.update(rcParamsDefault)
       colors = cycle(colors_)
 
       f, ax = plt.subplots(figsize=figsize_)

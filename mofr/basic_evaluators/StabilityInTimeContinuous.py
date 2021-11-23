@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, rcParams, rcParamsDefault
 from itertools import cycle
 
 import mofr.metrics as metrics
@@ -51,6 +51,7 @@ class StabilityInTimeContinuousEvaluator(Evaluator):
           return np.percentile(x,90)
 
       # setup plot details
+      rcParams.update(rcParamsDefault)
       colors = cycle(colors_)
 
       f, ax = plt.subplots(figsize=figsize_)
