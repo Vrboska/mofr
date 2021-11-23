@@ -3,6 +3,8 @@ import numpy as np
 from matplotlib import pyplot as plt, rcParams, rcParamsDefault
 import matplotlib
 from itertools import cycle
+from IPython.display import display
+
 
 import mofr.metrics as metrics
 from mofr.evaluator import Evaluator
