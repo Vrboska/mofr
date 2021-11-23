@@ -31,10 +31,10 @@ class HistogramCategoricalEvaluator(Evaluator):
       return self      
 
 
-    def get_graph(self):
+    def get_graph(self, plot=True):
 
       # setup plot details
-      plt.figure(figsize=figsize_)
+      f, ax = plt.subplots(figsize=figsize_)
       
       #set up data details
       df_=self.data
@@ -52,14 +52,20 @@ class HistogramCategoricalEvaluator(Evaluator):
 
 
       #set plotting parameters
-      plt.bar(table.index,table.values, color=colors_)
+      plt.bar(table.index,table.values, color=colors_, axes=ax)
 
-      plt.xlabel('Categories')
-      plt.ylabel('Share of the given category')
-      plt.title(f'Distribution of predictor "{self.predictor_column}"')
-      plt.grid(True)
+      plt.xlabel('Categories', axes=ax)
+      plt.ylabel('Share of the given category', axes=ax)
+      plt.title(f'Distribution of predictor "{self.predictor_column}"', axes=ax)
+      ax.grid(True)
 
-      plt.show()       
+      if plot==True:
+        plt.show()  
+
+      self.graph=f
+      self.axis=ax
+
+      plt.close() 
 
       return self
     

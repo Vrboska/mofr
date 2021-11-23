@@ -36,12 +36,12 @@ class ROCCurveEvaluator(Evaluator):
           self.scores=scores
           return self      
 
-    def get_graph(self):
+    def get_graph(self, plot=True):
 
         # setup plot details
         colors = cycle(colors_)
 
-        plt.figure(figsize=figsize_)
+        f, ax = plt.subplots(figsize=figsize_)
         lines = []
         labels = []
 
@@ -62,20 +62,26 @@ class ROCCurveEvaluator(Evaluator):
         #plotting the base line
         _x=[x/len(_fpr) for x in range(len(_fpr))]
         _y=[x/len(_fpr) for x in range(len(_fpr))]
-        plt.plot(_x, _y, linestyle='--', color='blue')
+        plt.plot(_x, _y, linestyle='--', color='blue', axes=ax)
         
         #set plotting parameters
         fig = plt.gcf()
         fig.subplots_adjust(bottom=0.25)
         plt.xlim(-0.01,1.01)
         plt.ylim(-0.01,1.03)
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title(f'ROC curves for target "{self.targets[0][0]}"')
-        plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
-        plt.grid(True)
+        plt.xlabel('False Positive Rate', axes=ax)
+        plt.ylabel('True Positive Rate', axes=ax)
+        plt.title(f'ROC curves for target "{self.targets[0][0]}"', axes=ax)
+        ax.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
+        ax.grid(True)
 
-        plt.show()
+        if plot==True:
+            plt.show()  
+
+        self.graph=f
+        self.axis=ax
+
+        plt.close()
         
         return self
 

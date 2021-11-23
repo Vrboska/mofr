@@ -31,25 +31,31 @@ class HistogramContinuousEvaluator(Evaluator):
       return self      
 
 
-    def get_graph(self):
+    def get_graph(self, plot=True):
 
       # setup plot details
-      plt.figure(figsize=figsize_)
+      f, ax = plt.subplots(figsize=figsize_)
       
       #set up data details
       df_=self.data
       df_[self.predictor_column]=df_[self.predictor_column].apply(float)
 
       #  produce histogram
-      n, bins, patches = plt.hist(df_[self.predictor_column], bins='doane', density=False, facecolor='b', alpha=0.75, edgecolor='black')
+      n, bins, patches = plt.hist(df_[self.predictor_column], bins='doane', density=False, facecolor='b', alpha=0.75, edgecolor='black', axes=ax)
 
-      plt.xlabel('Values')
-      plt.ylabel('Number of observations')
-      plt.title(f'Histogram of predictor "{self.predictor_column}"')
-      plt.grid(True)
+      plt.xlabel('Values', axes=ax)
+      plt.ylabel('Number of observations', axes=ax)
+      plt.title(f'Histogram of predictor "{self.predictor_column}"', axes=ax)
+      ax.grid(True)
 
-      plt.show()       
+      if plot==True:
+        plt.show()  
 
+      self.graph=f
+      self.axis=ax
+
+      plt.close() 
+      
       return self
     
 

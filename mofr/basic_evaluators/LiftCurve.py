@@ -36,12 +36,12 @@ class LiftCurveEvaluator(Evaluator):
           self.scores=scores
           return self      
 
-    def get_graph(self):
+    def get_graph(self, plot=True):
 
         # setup plot details
         colors = cycle(colors_)
 
-        plt.figure(figsize=figsize_)
+        f, ax = plt.subplots(figsize=figsize_)
         lines = []
         labels = []
 
@@ -57,28 +57,34 @@ class LiftCurveEvaluator(Evaluator):
 
             lift_curve = [metrics.liftN(df_[target_[0]], df_[score_], x) for x in x_]
             max_lift=max(max(lift_curve), max_lift)
-            l, = plt.plot(x_, lift_curve, color=color, lw=2)
+            l, = plt.plot(x_, lift_curve, color=color, lw=2, axes=ax)
             lines.append(l)
             labels.append(f'{score_}')
 
         #plotting the base line
         _x=[x/11 for x in range(12)]
         _y=[1 for x in range(12)]
-        plt.plot(_x, _y, linestyle='--', color='blue')
+        plt.plot(_x, _y, linestyle='--', color='blue', axes=ax)
                 
         #set plotting parameters
         fig = plt.gcf()
         fig.subplots_adjust(bottom=0.25)
         plt.xlim([0.0, 1.02])
         plt.ylim([0.9, max_lift+0.2])
-        plt.xlabel('Lift percentage')
-        plt.ylabel('Lift')
-        plt.title(f'Lifts for target "{self.targets[0][0]}"')
-        plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
-        plt.grid(True)
+        plt.xlabel('Lift percentage', axes=ax)
+        plt.ylabel('Lift', axes=ax)
+        plt.title(f'Lifts for target "{self.targets[0][0]}"', axes=ax)
+        ax.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
+        ax.grid(True)
 
-        plt.show()
-        
+        if plot==True:
+            plt.show()  
+
+        self.graph=f
+        self.axis=ax
+
+        plt.close()  
+
         return self
 
     def get_table(self):

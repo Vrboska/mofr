@@ -45,12 +45,12 @@ class TargetAssociationContinuousEvaluator(Evaluator):
       self.time_column=time_column
       return self 
 
-    def get_graph(self):
+    def get_graph(self, plot=True):
 
       # setup plot details
       colors = cycle(colors_)
 
-      plt.figure(figsize=figsize_)
+      f, ax = plt.subplots(figsize=figsize_)
 
       """
       The idea is to have a graph of predictor values on the x-axis and the log odds with respect to target variable
@@ -90,7 +90,7 @@ class TargetAssociationContinuousEvaluator(Evaluator):
       #plot each curve for each category
       for i, color in zip(range(len(crosstab_.columns)), colors):
           data_for_plot=crosstab_[crosstab_.columns[i]]
-          l, = plt.plot(range(len(data_for_plot.index)), data_for_plot.values, color=color, lw=2)
+          l, = plt.plot(range(len(data_for_plot.index)), data_for_plot.values, color=color, lw=2, axes=ax)
           lines.append(l)
           labels.append(f'{crosstab_.columns[i]}')
 
@@ -98,16 +98,22 @@ class TargetAssociationContinuousEvaluator(Evaluator):
       fig = plt.gcf()
       fig.subplots_adjust(bottom=0.25)
       plt.ticklabel_format(useOffset=False)
-      plt.xticks(range(len(data_for_plot.index)),crosstab_.index)
+      plt.xticks(range(len(data_for_plot.index)),crosstab_.index, axes=ax)
       #plt.xlim(min(_x)-0.1,max(_x)+0.1)
       #plt.ylim(-0.01,1.03)
-      plt.xlabel(self.predictor_column+'_binned')
-      plt.ylabel('Logodds of the target variable')
-      plt.title(f'Logodds of the target variable "{target_[0]}" vs. the predictor "{self.predictor_column}" values')
-      plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
-      plt.grid(True)
+      plt.xlabel(self.predictor_column+'_binned', axes=ax)
+      plt.ylabel('Logodds of the target variable', axes=ax)
+      plt.title(f'Logodds of the target variable "{target_[0]}" vs. the predictor "{self.predictor_column}" values', axes=ax)
+      ax.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
+      ax.grid(True)
 
-      plt.show()       
+      if plot==True:
+        plt.show()  
+
+      self.graph=f
+      self.axis=ax
+
+      plt.close()        
 
       return self
     

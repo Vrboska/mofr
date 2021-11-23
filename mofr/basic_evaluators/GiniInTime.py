@@ -44,12 +44,12 @@ class GiniInTimeEvaluator(Evaluator):
       self.time_column=time_column
       return self 
 
-    def get_graph(self):
+    def get_graph(self, plot=True):
 
       # setup plot details
       colors = cycle(colors_)
 
-      plt.figure(figsize=figsize_)
+      f, ax = plt.subplots(figsize=figsize_)
 
       """
       The idea is to have a graph of GINI metric in time (x-axis chronologically ordered) for a given target
@@ -71,7 +71,7 @@ class GiniInTimeEvaluator(Evaluator):
           gini_by_month.reset_index(level=0,inplace=True)
           _x=gini_by_month[self.time_column].apply(int)
           _y=gini_by_month['GINI']
-          l, = plt.plot(_x, _y, color=color, lw=2)
+          l, = plt.plot(_x, _y, color=color, lw=2, axes=ax)
           lines.append(l)
           labels.append(f'{score_}')
 
@@ -79,16 +79,22 @@ class GiniInTimeEvaluator(Evaluator):
       fig = plt.gcf()
       fig.subplots_adjust(bottom=0.25)
       plt.ticklabel_format(useOffset=False)
-      plt.xticks(range(min(_x), max(_x)+1))
+      plt.xticks(range(min(_x), max(_x)+1), axes=ax)
       #plt.xlim(min(_x)-0.1,max(_x)+0.1)
       #plt.ylim(-0.01,1.03)
-      plt.xlabel(self.time_column)
-      plt.ylabel('GINI')
-      plt.title(f'GINI in time for target "{self.targets[0][0]}"')
-      plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
-      plt.grid(True)
+      plt.xlabel(self.time_column, axes=ax)
+      plt.ylabel('GINI', axes=ax)
+      plt.title(f'GINI in time for target "{self.targets[0][0]}"', axes=ax)
+      ax.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
+      ax.grid(True)
 
-      plt.show()       
+      if plot==True:
+          plt.show()  
+
+      self.graph=f
+      self.axis=ax
+
+      plt.close()
 
       return self
     

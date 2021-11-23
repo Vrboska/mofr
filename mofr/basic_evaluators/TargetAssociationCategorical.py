@@ -47,12 +47,12 @@ class TargetAssociationCategoricalEvaluator(Evaluator):
       self.time_column=time_column
       return self 
 
-    def get_graph(self):
+    def get_graph(self, plot=True):
 
       # setup plot details
       colors = cycle(colors_)
 
-      plt.figure(figsize=figsize_)
+      f, ax = plt.subplots(figsize=figsize_)
 
       """
       The idea is to have a graph of Mean of target (default rate) of each category in time (x-axis chronologically ordered) for the 
@@ -79,7 +79,7 @@ class TargetAssociationCategoricalEvaluator(Evaluator):
       #plot each curve for each category
       for i, color in zip(range(n_categories), colors):
           data_for_plot=crosstab_[categories[i]]
-          l, = plt.plot(data_for_plot, color=color, lw=2)
+          l, = plt.plot(data_for_plot, color=color, lw=2, axes=ax)
           lines.append(l)
           labels.append(f'{categories[i]}')
 
@@ -87,16 +87,22 @@ class TargetAssociationCategoricalEvaluator(Evaluator):
       fig = plt.gcf()
       fig.subplots_adjust(bottom=0.25)
       plt.ticklabel_format(useOffset=False)
-      plt.xticks(range(min(crosstab_.index), max(crosstab_.index)+1))
+      plt.xticks(range(min(crosstab_.index), max(crosstab_.index)+1), axes=ax)
       #plt.xlim(min(_x)-0.1,max(_x)+0.1)
       #plt.ylim(-0.01,1.03)
-      plt.xlabel(self.time_column)
-      plt.ylabel('Mean of the target')
-      plt.title(f'Target association (default rate) of predictor "{self.predictor_column}" in time')
-      plt.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
-      plt.grid(True)
+      plt.xlabel(self.time_column, axes=ax)
+      plt.ylabel('Mean of the target', axes=ax)
+      plt.title(f'Target association (default rate) of predictor "{self.predictor_column}" in time', axes=ax)
+      ax.legend(lines, labels) #, loc=(0, -.38), prop=dict(size=14)
+      ax.grid(True)
 
-      plt.show()       
+      if plot==True:
+        plt.show()  
+
+      self.graph=f
+      self.axis=ax
+
+      plt.close() 
 
       return self
     
