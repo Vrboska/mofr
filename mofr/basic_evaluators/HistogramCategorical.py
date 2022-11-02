@@ -49,7 +49,7 @@ class HistogramCategoricalEvaluator(Evaluator):
       assert n_categories<=max_categories_, f'The predictor column specified has more than {max_categories_} unique categories!'
 
       #  produce table of distribution/share of each category in time
-      table=df_['categorical_predictor'].value_counts(dropna=False, normalize=True)
+      table=df_[self.predictor_column].value_counts(dropna=False, normalize=True)
 
 
       #set plotting parameters
@@ -85,8 +85,8 @@ class HistogramCategoricalEvaluator(Evaluator):
       assert n_categories<=max_categories_, f'The predictor column specified has more than {max_categories_} unique categories!'
 
       #  produce table of distribution/share of each category in time
-      table1=df_['categorical_predictor'].value_counts(dropna=False, normalize=True)
-      table2=df_['categorical_predictor'].value_counts(dropna=False, normalize=False)
+      table1=df_[self.predictor_column].value_counts(dropna=False, normalize=True)
+      table2=df_[self.predictor_column].value_counts(dropna=False, normalize=False)
 
       final_table=pd.concat([table1, table2], axis=1)
       final_table.columns=[final_table.columns[0]+' %', final_table.columns[1]]
