@@ -91,7 +91,7 @@ class TargetAssociationContinuousEvaluator(Evaluator):
       #plot each curve for each category
       for i, color in zip(range(len(crosstab_.columns)), colors):
           data_for_plot=crosstab_[crosstab_.columns[i]]
-          l, = plt.plot(range(len(data_for_plot.index)), data_for_plot.values, color=color, lw=2, axes=ax)
+          l, = plt.plot(range(len(data_for_plot.index)), data_for_plot.values, color=color, lw=2)
           lines.append(l)
           labels.append(f'{crosstab_.columns[i]}')
 

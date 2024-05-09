@@ -54,7 +54,7 @@ class PRCurveEvaluator(Evaluator):
             for f_score in f_scores:
                 x = np.linspace(0.01, 1)
                 y = f_score * x / (2 * x - f_score)
-                l, = plt.plot(x[y >= 0], y[y >= 0], color='gray', alpha=0.2, axes=ax)
+                l, = plt.plot(x[y >= 0], y[y >= 0], color='gray', alpha=0.2)
                 plt.annotate('f1={0:0.1f}'.format(f_score), xy=(0.9, y[45] + 0.02), axes=ax)
             lines.append(l)
             labels.append('iso-f1 curves')
@@ -66,13 +66,13 @@ class PRCurveEvaluator(Evaluator):
             df_=self.data[self.data[target_[1]]==1] #filtering for only target-observable cases
 
             lr_precision, lr_recall, _ = metrics.precision_recall_curve(df_[target_[0]], df_[score_])
-            l, = plt.plot(lr_recall, lr_precision, color=color, lw=2, axes=ax)
+            l, = plt.plot(lr_recall, lr_precision, color=color, lw=2)
             lines.append(l)
             labels.append(f'{score_}')
 
         #plotting the base line
         no_skill = len(df_[df_[target_[0]]==1]) / len(df_)
-        plt.plot([0, 1], [no_skill, no_skill], linestyle='--',color='blue', axes=ax)
+        plt.plot([0, 1], [no_skill, no_skill], linestyle='--',color='blue')
 
         #set plotting parameters
         fig = plt.gcf()

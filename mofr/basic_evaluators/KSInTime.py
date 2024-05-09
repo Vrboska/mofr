@@ -72,7 +72,7 @@ class KSInTimeEvaluator(Evaluator):
             ks_by_month.reset_index(level=0,inplace=True)
             _x=ks_by_month[self.time_column].apply(int)
             _y=ks_by_month['KS']
-            l, = plt.plot(_x, _y, color=color, lw=2, axes=ax)
+            l, = plt.plot(_x, _y, color=color, lw=2)
             lines.append(l)
             labels.append(f'{score_}')
 

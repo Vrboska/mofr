@@ -58,14 +58,14 @@ class LiftCurveEvaluator(Evaluator):
 
             lift_curve = [metrics.liftN(df_[target_[0]], df_[score_], x) for x in x_]
             max_lift=max(max(lift_curve), max_lift)
-            l, = plt.plot(x_, lift_curve, color=color, lw=2, axes=ax)
+            l, = plt.plot(x_, lift_curve, color=color, lw=2)
             lines.append(l)
             labels.append(f'{score_}')
 
         #plotting the base line
         _x=[x/11 for x in range(12)]
         _y=[1 for x in range(12)]
-        plt.plot(_x, _y, linestyle='--', color='blue', axes=ax)
+        plt.plot(_x, _y, linestyle='--', color='blue')
                 
         #set plotting parameters
         fig = plt.gcf()

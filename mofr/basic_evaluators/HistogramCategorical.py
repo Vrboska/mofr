@@ -53,7 +53,7 @@ class HistogramCategoricalEvaluator(Evaluator):
 
 
       #set plotting parameters
-      plt.bar(table.index,table.values, color=colors_, axes=ax)
+      plt.bar(table.index,table.values, color=colors_)
 
       plt.xlabel('Categories', axes=ax)
       plt.ylabel('Share of the given category', axes=ax)

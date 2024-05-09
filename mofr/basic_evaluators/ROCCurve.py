@@ -63,7 +63,7 @@ class ROCCurveEvaluator(Evaluator):
         #plotting the base line
         _x=[x/len(_fpr) for x in range(len(_fpr))]
         _y=[x/len(_fpr) for x in range(len(_fpr))]
-        plt.plot(_x, _y, linestyle='--', color='blue', axes=ax)
+        plt.plot(_x, _y, linestyle='--', color='blue')
         
         #set plotting parameters
         fig = plt.gcf()

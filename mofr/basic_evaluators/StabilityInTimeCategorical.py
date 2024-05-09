@@ -71,7 +71,7 @@ class StabilityInTimeCategoricalEvaluator(Evaluator):
       #plot each curve for each category
       for i, color in zip(range(n_categories), colors):
           data_for_plot=crosstab_[categories[i]]
-          l, = plt.plot(data_for_plot, color=color, lw=2, axes=ax)
+          l, = plt.plot(data_for_plot, color=color, lw=2)
           lines.append(l)
           labels.append(f'{categories[i]}')
 
