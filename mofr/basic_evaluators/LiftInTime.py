@@ -72,7 +72,7 @@ class LiftInTimeEvaluator(Evaluator):
                   lift_by_month.reset_index(level=0,inplace=True)
                   _x=lift_by_month[self.time_column].apply(int)
                   _y=lift_by_month['LIFT']
-                  l, = plt.plot(_x, _y, color=color, lw=2, axes=ax)
+                  l, = plt.plot(_x, _y, color=color, lw=2)
                   lines.append(l)
                   labels.append(f'{score_}')
 

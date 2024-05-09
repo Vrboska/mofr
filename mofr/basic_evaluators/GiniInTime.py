@@ -72,7 +72,7 @@ class GiniInTimeEvaluator(Evaluator):
           gini_by_month.reset_index(level=0,inplace=True)
           _x=gini_by_month[self.time_column].apply(int)
           _y=gini_by_month['GINI']
-          l, = plt.plot(_x, _y, color=color, lw=2, axes=ax)
+          l, = plt.plot(_x, _y, color=color, lw=2)
           lines.append(l)
           labels.append(f'{score_}')
 

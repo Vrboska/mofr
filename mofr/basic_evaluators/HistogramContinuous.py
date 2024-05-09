@@ -42,7 +42,7 @@ class HistogramContinuousEvaluator(Evaluator):
       df_[self.predictor_column]=df_[self.predictor_column].apply(float)
 
       #  produce histogram
-      n, bins, patches = plt.hist(df_[self.predictor_column], bins='doane', density=False, facecolor='b', alpha=0.75, edgecolor='black', axes=ax)
+      n, bins, patches = plt.hist(df_[self.predictor_column], bins='doane', density=False, facecolor='b', alpha=0.75, edgecolor='black')
 
       plt.xlabel('Values', axes=ax)
       plt.ylabel('Number of observations', axes=ax)
